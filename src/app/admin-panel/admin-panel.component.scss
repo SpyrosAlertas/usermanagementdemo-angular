@@ -1,0 +1,36 @@
+$navbar-link-color-hover: #f7b801;
+
+$primary-bg-color: #ffffff;
+
+.centering-hc {
+    min-height: 100%;
+}
+
+.user-select:hover {
+    background-color: #f7b801;
+    cursor: pointer;
+}
+
+.line-color {
+    background-color: $primary-bg-color;
+}
+
+.alert-box {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    z-index: 1;
+}
+
+.btn:hover .rotating {
+    animation: 1.25s full-rotation infinite linear;
+}
+
+@keyframes full-rotation {
+    0% {
+        transform: rotate(0);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  appTitle: 'User Management Demo (Dev Mode)',
+  serverUrl: 'http://localhost:8080',
+  authHeader: 'Authorization',
+  maxFileSize: 2000000
 };
 
 /*

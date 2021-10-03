@@ -1,0 +1,21 @@
+$active-color: #f7b801;
+
+.active {
+    color: $active-color;
+}
+
+.alert-box {
+    position: absolute;
+    width: 100%;
+}
+
+// Disable collapse animation on large devices. This will prevent a glimpse
+// we see when on small devices we have expanded the navbar, then resize to large
+// size the window and click on a link on the navbar
+@media (min-width: 992px) {
+    .collapsing {
+        -webkit-transition: none;
+        transition: none;
+        display: none;
+    }
+}

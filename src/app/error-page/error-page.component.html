@@ -1,0 +1,4 @@
+<div class="container text-danger h-100 d-flex flex-column justify-content-center text-center">
+    <h2 [ngClass]="{ 'text-success': error?.type === 'success' }">{{error?.briefDescription}}</h2>
+    <p [ngClass]="{ 'text-success': error?.type === 'success' }">{{error?.description}}</p>
+</div>

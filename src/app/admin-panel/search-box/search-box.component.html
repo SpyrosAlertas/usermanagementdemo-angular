@@ -1,0 +1,226 @@
+<!-- Search Box + expand advanced filter options button -->
+<div class="container-fluid w-100 px-0 my-1 mt-5">
+    <div class="row mx-0 justify-content-center">
+        <div class="col-10 col-lg-4">
+            <div class="row bg-white rounded border">
+                <div class="col-8 border-right px-0">
+                    <!-- <div class="typewriter">Type your search</div> -->
+                    <form [formGroup]="filterOptionsForm">
+                        <input type="text" class="form-control border-0 shadow-none text-center"
+                            placeholder="Type your search" aria-label="username" aria-describedby="basic-addon1"
+                            name="username" formControlName="username"
+                            [ngClass]="{'typewriter': filterOptionsForm.get('username')?.value === null}">
+                    </form>
+                </div>
+                <!-- Search Button -->
+                <div class="col-2 px-0 border-left border-right text-center align-self-center">
+                    <button type="button" class="btn w-100" disabled>
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+                <!-- Expand/Collapse Advanced Search Options -->
+                <div class="col-2 px-0 border-left text-center align-self-center" placement="top"
+                    ngbTooltip="Expand to view advanced filtering options" container="body">
+                    <button type="button" class="btn w-100" (click)="collapse.toggle()"
+                        [attr.aria-expanded]="!isFilterOptionsCollapsed" aria-controls="collapseExample">
+                        <div class="btn-effects">
+                            <i class="bi bi-arrows-angle-expand" *ngIf="isFilterOptionsCollapsed"></i>
+                            <i class="bi bi-arrows-angle-contract" *ngIf="!isFilterOptionsCollapsed"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Options -->
+<div class="my-3">
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isFilterOptionsCollapsed">
+        <div class="row mx-5 pt-2 pb-3 bg-white rounded">
+            <form [formGroup]="filterOptionsForm" class="form col-12">
+                <div class="row">
+                    <!-- Is Enabled Filter Option -->
+                    <div class="col-12 pt-2 mb-2 text-center d-block d-lg-none border-bottom font-weight-bold">
+                        Enabled Account Status
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isEnabled" id="isEnabledEither"
+                                [value]="null" formControlName="isEnabled">
+                            <label class="form-check-label" for="isEnabledEither">
+                                Enabled + Not Enabled
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isEnabled" id="isEnabled" value="true"
+                                formControlName="isEnabled">
+                            <label class="form-check-label" for="isEnabled">
+                                Enabled Only
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isEnabled" id="isNotEnabled"
+                                value="false" formControlName="isEnabled">
+                            <label class="form-check-label" for="isNotEnabled">
+                                Not Enabled Only
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Is Not Locked Filter Option -->
+                    <div class="col-12 pb-1 my-2 text-center d-block d-lg-none border-bottom font-weight-bold">
+                        Locked Account Status
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isNotLocked" id="isNotLockedEither"
+                                [value]="null" formControlName="isNotLocked">
+                            <label class="form-check-label" for="isNotLockedEither">
+                                Locked + Not Locked
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isNotLocked" id="isNotLocked"
+                                value="true" formControlName="isNotLocked">
+                            <label class="form-check-label" for="isNotLocked">
+                                Not Locked Only
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="isNotLocked" id="isLocked" value="false"
+                                formControlName="isNotLocked">
+                            <label class="form-check-label" for="isLocked">
+                                Locked Only
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Has role filter -->
+                    <div class="col-12 pt-2 mb-2 text-center d-block d-lg-none border-bottom font-weight-bold">
+                        Has Role
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="hasRoleAny" [value]="null"
+                                formControlName="role">
+                            <label class="form-check-label" for="hasRoleAny">
+                                Admins + Users
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="Admin" value="Admin"
+                                formControlName="role">
+                            <label class="form-check-label" for="Admin">
+                                Admins Only
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="role" id="User" value="User"
+                                formControlName="role">
+                            <label class="form-check-label" for="User">
+                                Users Only
+                            </label>
+                        </div>
+                    </div>
+                    <!-- Start Date Filter -->
+                    <div class="col-12 col-lg-4">
+                        <div class="row py-0 my-0 text-center justify-content-center">
+                            <!-- Start Date -->
+                            <div class="col-12 font-weight-bold">Start Date</div>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Day - Month - Year" name="startDate"
+                                            formControlName="startDate" ngbDatepicker #ds="ngbDatepicker"
+                                            [readonly]="true">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="ds.toggle()"
+                                                type="button"><i class="bi bi-calendar3"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- If Start Date Filter is Applied -->
+                                <span class="bg-white px-2 py-1 mr-2"
+                                    [class.hidden]="(filterOptionsForm.get('startDate')?.value === null)">
+                                    <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                                        (click)="filterOptionsForm.get('startDate')?.setValue(null)"></i>
+                                </span>
+                            </div>
+                            <!-- End Date -->
+                            <div class="col-12 pt-lg-2 font-weight-bold"
+                                *ngIf="filterOptionsForm.get('startDate')?.value">End Date</div>
+                            <div class="form-inline" *ngIf="filterOptionsForm.get('startDate')?.value">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input class="form-control" placeholder="Year - Month - Day" name="endDate"
+                                            formControlName="endDate" ngbDatepicker #de="ngbDatepicker"
+                                            [readonly]="true" [minDate]="{
+                                                year: filterOptionsForm.get('startDate')?.value.year,
+                                                month: filterOptionsForm.get('startDate')?.value.month,
+                                                day: filterOptionsForm.get('startDate')?.value.day
+                                            }" container="body">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar" (click)="de.toggle()"
+                                                type="button"><i class="bi bi-calendar3"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- If End Date Filter is Applied -->
+                                <span class="bg-white px-2 py-1 mr-2"
+                                    [class.hidden]="(filterOptionsForm.get('endDate')?.value === null)">
+                                    <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                                        (click)="filterOptionsForm.get('endDate')?.setValue(null)"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Show a list of all active filters below filter selection box - which user can click and delete at any time -->
+<div class="container-fluid">
+    <div class="row mx-5" [ngClass]="{'mb-lg-3': hasAnyFilter()}">
+        <!-- If Enabled Filter is Applied -->
+        <div class="col-6 col-lg-2 mb-3" *ngIf="filterOptionsForm.get('isEnabled')?.value !== null">
+            <span class="bg-white rounded px-2 py-1">
+                {{filterOptionsForm.get('isEnabled')?.value === 'true' ? 'Enabled' : 'Not Enabled' }}
+                <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                    (click)="filterOptionsForm.get('isEnabled')?.setValue(null)"></i>
+            </span>
+        </div>
+        <!-- If Not Locked Filter is Applied -->
+        <div class="col-6 col-lg-2 mb-3" *ngIf="filterOptionsForm.get('isNotLocked')?.value !== null">
+            <span class="bg-white px-2 py-1">
+                {{filterOptionsForm.get('isNotLocked')?.value === 'true' ? 'Not Locked' : 'Locked' }}
+                <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                    (click)="filterOptionsForm.get('isNotLocked')?.setValue(null)"></i>
+            </span>
+        </div>
+        <!-- If Role Filter is Applied -->
+        <div class="col-6 col-lg-2 mb-3" *ngIf="filterOptionsForm.get('role')?.value !== null">
+            <span class="bg-white px-2 py-1">
+                {{filterOptionsForm.get('role')?.value}}
+                <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                    (click)="filterOptionsForm.get('role')?.setValue(null)"></i>
+            </span>
+        </div>
+        <!-- If Start Date Filter is Applied -->
+        <div class="col-6 col-lg-2 mb-3" *ngIf="filterOptionsForm.get('startDate')?.value !== null">
+            <span class="bg-white px-2 py-1">
+                {{filterOptionsForm.get('startDate')?.value.year}}-{{filterOptionsForm.get('startDate')?.value.month}}-{{filterOptionsForm.get('startDate')?.value.day}}
+                <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                    (click)="filterOptionsForm.get('startDate')?.setValue(null)"></i>
+            </span>
+        </div>
+        <!-- If End Date Filter is Applied -->
+        <div class="col-6 col-lg-2 mb-3" *ngIf="filterOptionsForm.get('endDate')?.value !== null">
+            <span class="bg-white px-2 py-1">
+                {{filterOptionsForm.get('endDate')?.value.year}}-{{filterOptionsForm.get('endDate')?.value.month}}-{{filterOptionsForm.get('endDate')?.value.day}}
+                <i class="bi bi-dash-circle ml-2 text-danger my-btn"
+                    (click)="filterOptionsForm.get('endDate')?.setValue(null)"></i>
+            </span>
+        </div>
+    </div>
+</div>

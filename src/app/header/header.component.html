@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-lg navbar-tc">
+
+  <!-- Navbar Brand Name -->
+  <a class="navbar-brand" routerLink="" (click)="isNavbarCollapsed = true">User Management Demo</a>
+
+  <!-- Navbar Toggler Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+    (click)="isNavbarCollapsed = !isNavbarCollapsed">
+    <span class="navbar-toggler-icon border-red"></span>
+  </button>
+
+  <!-- Navbar content -->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" [(ngbCollapse)]="isNavbarCollapsed">
+    <!-- Navbar left side content -->
+    <ul class="navbar-nav text-center mr-auto">
+      <!-- Home link -->
+      <li class="nav-item">
+        <div class="row d-flex justify-content-center">
+          <div class="col-3 col-lg-12">
+            <a class="nav-link" routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+              (click)="isNavbarCollapsed = true">Home</a>
+          </div>
+        </div>
+      </li>
+      <!-- Admin Panel - appears only to users who have have logged in and have role of ADMIN -->
+      <li class="nav-item active" *ngIf="role === 'ADMIN'">
+        <div class="row d-flex justify-content-center">
+          <div class="col-3 col-lg-12">
+            <a class="nav-link" routerLink="/admin-panel" routerLinkActive="active"
+              (click)="isNavbarCollapsed = true">Admin Panel</a>
+          </div>
+        </div>
+      </li>
+      <!-- Drop down divider to split left/right content in small devices with a line -->
+      <div class="dropdown-divider"></div>
+    </ul>
+
+    <!-- Navbar right side content -->
+    <ul class="navbar-nav" *ngIf="!username">
+      <!-- When user is not logged in -->
+      <li class="nav-item d-flex justify-content-between">
+        <a class="nav-link btn btn-sm mr-3 px-3 px-lg-0 d-inline"
+          (click)="toggleLoginBox(); isNavbarCollapsed = true"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+        <a class="nav-link btn btn-sm ml-3 px-3 px-lg-0 d-inline"
+          (click)="toggleRegisterBox(); isNavbarCollapsed = true"><i class="bi bi-person-plus"></i> Register</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav" *ngIf="username">
+      <!-- When user is logged in -->
+      <li class="nav-item d-flex justify-content-between">
+        <span class="nav-link w-100 text-center active mr-3 px-3 px-lg-1 d-inline">{{expiresAtFormatted}}</span>
+      </li>
+      <li class="nav-item d-flex justify-content-between">
+        <a class="nav-link btn btn-sm mr-3 px-3 px-lg-1 d-inline" routerLink="/profile/{{username}}"
+          routerLinkActive="active" (click)="isNavbarCollapsed = true"><i class="bi bi-person-lines-fill"></i>
+          {{username}}</a>
+        <a class="nav-link btn btn-sm ml-3 px-3 px-lg-1 d-inline" (click)="logout(); isNavbarCollapsed = true">Logout <i
+            class="bi bi-box-arrow-right"></i>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+<!-- Show notification alert box - if there is an alert -->
+<div *ngIf="alert" class="alert-box">
+  <ngb-alert [type]="alert.type" (closed)="alert = undefined">{{ alert.message }}</ngb-alert>
+</div>
+
+<!-- Dropdown menus for: login & register (for non loged in users) -->
+<div *ngIf="isLoginBoxOpen">
+  <app-login (toggleLoginBoxEvent)="toggleLoginBox()" (loginSuccessEvent)="loginSuccess()"></app-login>
+</div>
+<div *ngIf="isRegisterBoxOpen">
+  <app-register (toggleRegisterBoxEvent)="toggleRegisterBox()" (registerSuccessEvent)="registerSuccessNotification()">
+  </app-register>
+</div>

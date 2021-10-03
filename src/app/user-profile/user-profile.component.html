@@ -1,0 +1,245 @@
+<div class="container rounded h-100 centering-hc" *ngIf="!serverConnectionError && user">
+    <div class="row centering-hc d-flex justify-content-center py-5">
+        <div class="col-11 col-lg-8 align-self-center text-center">
+            <!-- Users profile: view, edit, delete his profile -->
+            <form [formGroup]="profileForm" class="shadow py-4 rounded">
+                <div class="row mx-0 px-0">
+                    <div [ngClass]="isSelf ? 'col-4' : 'col-0 col-lg-4'">
+                    </div>
+                    <div [ngClass]="isSelf ? 'col-4' : 'col-6 col-lg-4'">
+                        <div class="image-box mb-3">
+                            <!-- If user is logged in and has profile image, display his image -->
+                            <img class="img-size rounded-circle shadow shadow-lg" [src]="profileImage | blobToSafeUrl"
+                                alt="Users profile image" *ngIf="profileImage">
+                            <!-- If user is logged in and profile image isn't loading from server - has no profile image, display a default svg icon -->
+                            <span *ngIf="!profileImage && !profileImageLoading">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor"
+                                    class="bi bi-person-circle rounded-circle" viewBox="0 0 16 16">
+                                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                    <path fill-rule="evenodd"
+                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+                                </svg>
+                            </span>
+                            <!-- Button to upload a new profile image -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgba(0, 150, 0, 1.0)"
+                                class="bi bi-cloud-arrow-up btn-upload" viewBox="0 0 16 16" placement="right"
+                                ngbTooltip="Upload profile image" container="body"
+                                (click)="toggleUploadingProfileImage()" *ngIf="isSelf">
+                                <path fill-rule="evenodd"
+                                    d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z" />
+                                <path
+                                    d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z" />
+                            </svg>
+                            <!-- Button to delete profile image (bottom right corner) -->
+                            <span *ngIf="profileImage || profileImageLoading">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                    fill="rgba(255, 0, 0, 1.0)" class="bi bi-x-circle btn-del" viewBox="0 0 16 16"
+                                    placement="right" ngbTooltip="Delete profile image" container="body"
+                                    (click)="profileImageDelete()">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                    <path
+                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-center text-lg-left align-self-center"
+                        [ngClass]="isSelf ? 'col-4' : 'col-6 col-lg-4'">
+                        <span *ngIf="!isSelf">
+                            <div class="row" [ngClass]="user.isEnabled ? 'text-success' : 'text-danger'">
+                                <div class="col-3">Active:</div>
+                                <div class="col-9 text-success" *ngIf="user.isEnabled">
+                                    Yes <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <div class="col-9 text-danger" *ngIf="!user.isEnabled">
+                                    No <i class="bi bi-x-circle"></i>
+                                </div>
+                            </div>
+                            <div class="row" [ngClass]="user.isNonLocked ? 'text-success' : 'text-danger'">
+                                <div class="col-3">Locked:</div>
+                                <div class="col-9 text-success" *ngIf="user.isNonLocked">
+                                    No <i class="bi bi-check2-circle"></i>
+                                </div>
+                                <div class="col-9 text-danger" *ngIf="!user.isNonLocked">
+                                    Yes <i class="bi bi-x-circle"></i>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group" *ngFor="let formControlItem of formControls">
+                    <!-- Loop through every control item and display it -->
+                    <div class="row mx-0">
+                        <div class="col-12 col-lg-3 text-left text-lg-right">
+                            <label for={{formControlItem}}>{{formControlItem | formControlField}}:
+                            </label>
+                        </div>
+                        <div class="col-12 col-lg-9 text-left pr-3 pr-lg-5">
+                            <input id={{formControlItem}}
+                                type="{{formControlItem !== 'password' ? 'text' : 'password'}}"
+                                formControlName={{formControlItem}} class="w-100 mx-0 px-0" [class.disabled]="true">
+                        </div>
+                    </div>
+                    <!-- Password form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.password.touched && profileForm.controls.password.errors && formControlItem == 'password'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.password.errors?.required">
+                                <i class="bi bi-exclamation-circle"></i> Password cannot be empty
+                            </span>
+                        </div>
+                    </div>
+                    <!-- First name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.firstName.touched && profileForm.controls.firstName.errors && formControlItem == 'firstName'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.firstName.errors?.required">
+                                <i class="bi bi-exclamation-circle"></i> First name is required
+                            </span>
+                            <span *ngIf="profileForm.controls.firstName.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> First name is invalid: has to be at least 2 and
+                                at most 50 characters long and may contain only: a-z, A-Z, α-ω, Α-Ω, . , - '
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Last name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.lastName.touched && profileForm.controls.lastName.errors && formControlItem == 'lastName'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.lastName.errors?.required">
+                                <i class="bi bi-exclamation-circle"></i> Last name is required
+                            </span>
+                            <span *ngIf="profileForm.controls.lastName.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> Last name is invalid: has to be at least 2 and
+                                at most 50 characters long and may contain only: a-z, A-Z, α-ω, Α-Ω, . , - '
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Email name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.email.touched && profileForm.controls.email.errors && formControlItem == 'email'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.email.errors?.required">
+                                <i class="bi bi-exclamation-circle"></i> Email is required
+                            </span>
+                            <span *ngIf="profileForm.controls.email.errors?.email">
+                                <i class="bi bi-exclamation-circle"></i> Please type a valid email address
+                            </span>
+                            <span *ngIf="profileForm.controls.email.errors?.maxlength">
+                                <i class="bi bi-exclamation-circle"></i> Email has to be less than 50 characters long
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Phone name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.phone.touched && profileForm.controls.phone.errors && formControlItem == 'phone'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.phone.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> Phone number must consist of at least 10 and up
+                                to 15 digits
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Country name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.country.touched && profileForm.controls.country.errors && formControlItem == 'country'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.country.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> Country name must be at least 3 and at most 100
+                                characters long
+                                and may contain only: a-z, A-Z, α-ω, Α-Ω, . , & ( ) - '
+                            </span>
+                        </div>
+                    </div>
+                    <!-- City name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.city.touched && profileForm.controls.city.errors && formControlItem == 'city'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.city.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> City name must be at least 3 and at most 50
+                                characters long
+                                and may contain only: a-z, A-Z, α-ω, Α-Ω, . , & ( ) - '
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Address name form validations -->
+                    <div class="row text-danger mx-0"
+                        *ngIf="profileForm.controls.address.touched && profileForm.controls.address.errors && formControlItem == 'address'">
+                        <!-- Below is required for centering the error message below the input form -->
+                        <div class="col-12 col-lg-3">
+                        </div>
+                        <div class="col-12 col-lg-9 text-center pr-3 pr-lg-5">
+                            <span *ngIf="profileForm.controls.address.errors?.pattern">
+                                <i class="bi bi-exclamation-circle"></i> Address name must be at least 3 and at most 50
+                                characters long
+                                and may contain only: a-z, A-Z, α-ω, Α-Ω, 0-9, . , & ( ) - '
+                            </span>
+                        </div>
+                    </div>
+                    <!-- End of form validations -->
+                </div>
+                <!-- When not in editing mode, show these buttons -->
+                <div *ngIf="!isEditing" class="w-100 d-flex justify-content-between px-3 px-lg-5">
+                    <!-- Button to edit profile details -->
+                    <button class="btn btn-sm btn-primary text-right" (click)="toggleEditing()" *ngIf="isSelf">Edit
+                        Profile</button>
+                    <!-- Button to activate users account, is disabled when account is already active -->
+                    <button class="btn btn-sm btn-success text-right" [attr.disabled]="user.isEnabled ? true : null"
+                        *ngIf="!isSelf" (click)="activateProfile()">Activate</button>
+                    <!-- Button to delete account -->
+                    <button class="btn btn-sm btn-danger" (click)="deleteProfile()">Delete Account</button>
+                </div>
+                <!-- When in editing mode, show these buttons -->
+                <div *ngIf="isEditing" class="w-100 d-flex justify-content-between px-3 px-lg-5" role="group">
+                    <div class="btn-group">
+                        <!-- Button to save any changes the user has made -->
+                        <button class="btn btn-sm btn-success" (click)="saveChanges()"
+                            [disabled]="profileForm.invalid">Save Changes</button>
+                        <!-- Button to cancel any change the user may have made -->
+                        <button class="btn btn-sm btn-secondary" (click)="resetForm()">Cancel Changes</button>
+                    </div>
+                    <!-- Button to delete account -->
+                    <button class="btn btn-sm btn-danger " (click)="deleteProfile()">Delete Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Pop up image file upload-->
+<div class="image-file-upload d-flex flex-column justify-content-center align-items-center"
+    *ngIf="uploadingProfileImage">
+    <div class="pb-1 navbar-tc rounded">
+        <input class="form-control w-100 navbar-tc text-white rounded upload-input" type="file" name="profileImage"
+            (change)="profileImageUpdate($event)" (click)="clickInsideUploadBox()">
+        <div *ngIf="imageUploadErrorMessage" class="text-white text-center w-100">
+            {{imageUploadErrorMessage}}
+        </div>
+    </div>
+</div>
+
+<!-- Error message in case of profile delete/update failure -->
+<div *ngIf="alert" class="alert-box d-flex justify-content-center">
+    <ngb-alert type="{{alert.type}}" (closed)="alert = undefined">{{alert.message}}</ngb-alert>
+</div>

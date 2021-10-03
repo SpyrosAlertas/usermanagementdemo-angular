@@ -1,0 +1,74 @@
+.centering-hc {
+    min-height: 100%;
+}
+
+.img-size {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+}
+
+.image-box {
+    position: relative;
+    display: inline-block;
+}
+
+.disabled {
+    cursor: default;
+}
+
+.btn-del {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.btn-upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.btn-del:hover,
+.btn-upload:hover {
+    cursor: pointer;
+}
+
+.btn-del:focus,
+.btn-upload:focus {
+    outline: none;
+}
+
+.upload-input {
+    border: none;
+}
+
+.image-file-upload {
+    position: absolute;
+    width: 100%;
+}
+
+.alert-box {
+    position: absolute;
+    top: 5px;
+    width: 100%;
+}
+
+@media (max-width: 992px) {
+    .image-file-upload {
+        top: 15px;
+    }
+    .navbar-tc {
+        width: 85%;
+    }
+}
+
+@media (min-width: 992px) {
+    .image-file-upload {
+        height: 100%;
+        top: 0;
+    }
+    .navbar-tc {
+        width: 50%;
+    }
+}

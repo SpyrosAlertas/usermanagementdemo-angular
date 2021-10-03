@@ -1,0 +1,163 @@
+<!-- Show notification alert box -->
+<div *ngIf="alert" class="alert-box">
+    <ngb-alert [type]="alert.type" (closed)="alert = undefined">{{ alert.message }}</ngb-alert>
+</div>
+
+<div class="container rounded h-100 centering-hc mb-5 mb-lg-0" *ngIf="!serverConnectionError && users">
+    <!-- Grid-Table vertically centered -->
+    <div class="row centering-hc">
+        <div class="col-12 align-self-center overflow-auto d-flex flex-column align-items-center px-0">
+
+            <!-- Search box Component -->
+            <div class="row w-100">
+                <div class="col-12 px-0">
+                    <app-search-box (filterOptionsChangeEvent)="filterOptionsUpdate($event)"
+                        [filterOptions]="filterOptions"></app-search-box>
+                </div>
+            </div>
+
+            <!-- Table header (row with) - column names -->
+            <div class="row w-100 text-center text-truncate px-3 px-lg-0 mt-3 mt-lg-0">
+                <!-- Table column names - leave some grid space for the buttons -->
+                <div class="col-7 col-lg-10 rounded-top bg-secondary text-white font-weight-bold">
+                    <div class="row py-2">
+                        <div class="col-6 col-lg-3">
+                            <span class="user-select px-2 py-1 rounded" placement="top"
+                                ngbTooltip="Sort by Username or reverse order" container="body"
+                                (click)="changeSort('username')">
+                                Username
+                                <span *ngIf="sort === 'username' && order === 'asc'">
+                                    <i class="bi bi-caret-up"></i>
+                                </span>
+                                <span *ngIf="sort === 'username' && order === 'desc'">
+                                    <i class="bi bi-caret-down"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-6 col-lg-2">
+                            <span class="user-select px-2 py-1 rounded" placement="top"
+                                ngbTooltip="Sort by Is Enabled status or reverse order" container="body"
+                                (click)="changeSort('isEnabled')">
+                                Is Enabled
+                                <span *ngIf="sort === 'isEnabled' && order === 'asc'">
+                                    <i class="bi bi-caret-up"></i>
+                                </span>
+                                <span *ngIf="sort === 'isEnabled' && order === 'desc'">
+                                    <i class="bi bi-caret-down"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <!-- On small devices the below 3 fields won't be visible -->
+                        <div class="col-2 d-none d-lg-block">
+                            <span class="user-select px-2 py-1 rounded" placement="top"
+                                ngbTooltip="Sort by Is Non Locked or reverse order" container="body"
+                                (click)="changeSort('isNonLocked')">
+                                Is Locked
+                                <span *ngIf="sort === 'isNonLocked' && order === 'asc'">
+                                    <i class="bi bi-caret-up"></i>
+                                </span>
+                                <span *ngIf="sort === 'isNonLocked' && order === 'desc'">
+                                    <i class="bi bi-caret-down"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-1 d-none d-lg-block">
+                            <span class="user-select px-2 py-1 rounded" placement="top"
+                                ngbTooltip="Sort by Role or reverse order" container="body"
+                                (click)="changeSort('role')">
+                                Role
+                                <span *ngIf="sort === 'role' && order === 'asc'">
+                                    <i class="bi bi-caret-up"></i>
+                                </span>
+                                <span *ngIf="sort === 'role' && order === 'desc'">
+                                    <i class="bi bi-caret-down"></i>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-4 d-none d-lg-block">
+                            <span class="user-select px-2 py-1 rounded" placement="top"
+                                ngbTooltip="Sort by Join Date or reverse order" container="body"
+                                (click)="changeSort('joinDate')">
+                                Join Date
+                                <span *ngIf="sort === 'joinDate' && order === 'asc'">
+                                    <i class="bi bi-caret-up"></i>
+                                </span>
+                                <span *ngIf="sort === 'joinDate' && order === 'desc'">
+                                    <i class="bi bi-caret-down"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5 col-lg-2 align-self-center">
+                    <span class="btn btn-sm btn-success px-2 py-1" placement="top"
+                        ngbTooltip="Fetch updated results from the server" container="body" (click)="fetchUsers()">
+                        <div class="rotating d-inline-block"><i class="bi bi-arrow-repeat"></i></div> Refresh
+                    </span>
+                </div>
+            </div>
+
+            <!-- Rows of list of users -->
+            <div *ngFor="let user of users; let i = index;" class="row w-100 text-center px-3 px-lg-0">
+                <div class="col-7 col-lg-10 border user-select" routerLink="/profile/{{user.username}}"
+                    [ngClass]="{ 'line-color': i%2 !== 0 }">
+                    <div class="row py-2">
+                        <div class="col-6 col-lg-3 text-truncate">{{user.username}}</div>
+                        <div class="col-6 col-lg-2">
+                            <span *ngIf="user.isEnabled" class="text-success">Yes</span>
+                            <span *ngIf="!user.isEnabled" class="text-danger">No</span>
+                        </div>
+                        <!-- On small devices the below 3 fields won't be visible -->
+                        <div class="col-2 d-none d-lg-block">
+                            <span *ngIf="user.isNonLocked" class="text-success">No</span>
+                            <span *ngIf="!user.isNonLocked" class="text-danger">Yes</span>
+                        </div>
+                        <div class="col-1 d-none d-lg-block">{{user.role | titlecase }}</div>
+                        <div class="col-4 d-none d-lg-block">{{user.joinDate | date: 'd MMM y h:mm:ss a' }}</div>
+                        <!-- <div class="col-4 d-none d-lg-block">{{getLocalTime(user.joinDate)}}</div> -->
+                    </div>
+                </div>
+                <!-- Buttons to Activate and Delete users account -->
+                <div class="col-5 col-lg-2 align-self-center">
+                    <div class="row">
+                        <div class="col-6 col-lg-6">
+                            <button class="mx-1 btn btn-sm btn-primary" [attr.disabled]="user.isEnabled ? true : null"
+                                (click)="activateUser(user.username)">Activate</button>
+                        </div>
+                        <div class="col-6 col-lg-6">
+                            <button class="ml-1 mr-2 btn btn-sm btn-danger"
+                                (click)="deleteUser(user.username)">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination & Page Size dropdown -->
+            <div class="col-12 pt-3">
+                <div class="row justify-content-end">
+                    <!-- Pagination -->
+                    <div class="col-10" *ngIf="collectionSize">
+                        <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize"
+                            [maxSize]="3" [boundaryLinks]="true" (pageChange)="changePage()" class="d-inline-block">
+                        </ngb-pagination>
+                    </div>
+                    <!-- Page Size Dropdown -->
+                    <div class="col-2 text-lg-center px-0" ngbDropdown container="body">
+                        <button class="btn btn-outline-primary" id="pageSizeOptionsDropdown"
+                            ngbDropdownToggle>{{pageSize}}</button>
+                        <div ngbDropdownMenu aria-labelledby="pageSizeOptionsDropdown">
+                            <button ngbDropdownItem *ngFor="let pageSizeOption of pageSizeOptions"
+                                (click)="pageSizeChange(pageSizeOption)">{{pageSizeOption}}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border p-2 mb-4 rounded"
+                [ngClass]="collectionSize === 0 ? 'text-warning bg-dark border-warning' : 'bg-white border-dark'">
+                {{collectionSize === 0 ? "No" : collectionSize}} Results
+            </div>
+
+        </div>
+    </div>
+</div>

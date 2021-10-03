@@ -1,1 +1,90 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Importing Bootstrap SCSS file. */
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+// Variables
+
+$primary-bg-color: #edf2f4;
+
+$navbar-bg-color: #3f51b5;
+$navbar-link-color: #ffffff;
+$navbar-link-color-hover: #f7b801;
+$navbar-toggler-color: rgba(255, 255, 255, 0.8);
+$navbar-toggler-color-hover: rgba(0, 255, 255, 0.8);
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    background-color: $primary-bg-color;
+}
+
+.navbar-tc {
+    background-color: $navbar-bg-color;
+}
+
+.navbar-tc a {
+    color: $navbar-link-color;
+}
+
+.navbar-tc a:hover {
+    color: $navbar-link-color-hover;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='#{$navbar-toggler-color}' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+}
+
+.navbar-toggler {
+    border-color: $navbar-toggler-color !important;
+}
+
+.navbar-toggler:hover {
+    border-color: $navbar-link-color-hover !important;
+}
+
+.navbar-toggler:focus,
+.navbar-toggler:active,
+.navbar-toggler-icon:focus {
+    border-color: $navbar-link-color-hover !important;
+    outline: none;
+}
+
+// pop up box for login/register forms that appear below header top right side
+.popup-box {
+    position: absolute;
+    margin-top: 25px;
+    z-index: 100;
+}
+
+// pop up box for login/register color properties
+.popup-box-tc {
+    background-color: $navbar-bg-color;
+    color: $navbar-link-color;
+}
+
+.upload-input:focus {
+    background-color: $navbar-bg-color;
+}
+
+// pop up box for login/register forms that appear below header top right side - small devices
+@media (max-width: 992px) {
+    .popup-box {
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+// pop up box for login/register forms that appear below header top right side - large devices
+@media (min-width: 992px) {
+    .popup-box {
+        right: 25px;
+    }
+}

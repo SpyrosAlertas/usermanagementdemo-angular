@@ -1,0 +1,29 @@
+<div class="container-fluid ml-2">
+    <div class="row w-100">
+        <div class="col-10 col-lg-3 p-3 rounded popup-box popup-box-tc" (click)="clickInside()">
+            <!-- Login Form -->
+            <form [formGroup]="loginForm" class="form">
+                <!-- Username field -->
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" aria-describedby="usernameHelp"
+                        placeholder="Enter username" formControlName="username">
+                </div>
+                <!-- Password field -->
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter password"
+                        formControlName="password">
+                </div>
+                <!-- Error Message field -->
+                <div *ngIf="errorMessage" class="text-center">
+                    <ngb-alert type="danger" (closed)="close()">{{ errorMessage }}</ngb-alert>
+                </div>
+                <!-- Login Button -->
+                <div class="d-flex justify-content-center">
+                    <button type="button" class="btn btn-sm btn-light" (click)="login()">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
